@@ -1,4 +1,4 @@
-local DaviHub = loadstring(game:HttpGet("https://github.com/Davicoderliner/Davi-library-4.0-/blob/main/DaviHubLibrary.lua"))()
+local DaviHub = loadstring(game:HttpGet("https://raw.githubusercontent.com/Davicoderliner/Davi-library-4.0-/refs/heads/main/DaviHubLibrary.lua"))()
 
 local Window = DaviHub:CreateWindow("Davi Hub 4.0")
 
