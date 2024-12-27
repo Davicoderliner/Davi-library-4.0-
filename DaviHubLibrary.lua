@@ -1,6 +1,6 @@
 -- DaviHubLibrary.lua
--- Custom UI Library for Davi Hub 4.0 by davi.scripts
--- Stylish, Animated, and Modern
+-- Custom UI Library for Davi Hub 4.0
+-- Stylish, Animated, Draggable, and Modern
 
 local DaviHubLibrary = {}
 
@@ -44,7 +44,7 @@ local function makeDraggable(frame, dragHandle)
     end)
 end
 
--- Function to create a new window
+-- Main function to create a new window
 function DaviHubLibrary:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "DaviHubUI"
@@ -53,9 +53,9 @@ function DaviHubLibrary:CreateWindow(title)
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    MainFrame.Size = UDim2.new(0, 500, 0, 400)
-    MainFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    MainFrame.Size = UDim2.new(0, 600, 0, 400)
+    MainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     MainFrame.ClipsDescendants = true
 
@@ -72,6 +72,7 @@ function DaviHubLibrary:CreateWindow(title)
     DragHandle.Text = title or "Davi Hub"
     DragHandle.TextColor3 = Color3.fromRGB(255, 255, 255)
     DragHandle.TextSize = 16
+    DragHandle.TextXAlignment = Enum.TextXAlignment.Center
 
     local UICornerHandle = Instance.new("UICorner")
     UICornerHandle.CornerRadius = UDim.new(0, 10)
@@ -82,7 +83,7 @@ function DaviHubLibrary:CreateWindow(title)
     local TabContainer = Instance.new("Frame")
     TabContainer.Name = "TabContainer"
     TabContainer.Parent = MainFrame
-    TabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    TabContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     TabContainer.Size = UDim2.new(0, 120, 1, -30)
     TabContainer.Position = UDim2.new(0, 0, 0, 30)
     TabContainer.BorderSizePixel = 0
@@ -91,10 +92,14 @@ function DaviHubLibrary:CreateWindow(title)
     UICornerTab.CornerRadius = UDim.new(0, 10)
     UICornerTab.Parent = TabContainer
 
+    local TabList = Instance.new("UIListLayout")
+    TabList.Parent = TabContainer
+    TabList.SortOrder = Enum.SortOrder.LayoutOrder
+
     local PageContainer = Instance.new("Frame")
     PageContainer.Name = "PageContainer"
     PageContainer.Parent = MainFrame
-    PageContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    PageContainer.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     PageContainer.Size = UDim2.new(1, -120, 1, -30)
     PageContainer.Position = UDim2.new(0, 120, 0, 30)
     PageContainer.BorderSizePixel = 0
@@ -103,20 +108,16 @@ function DaviHubLibrary:CreateWindow(title)
     UICornerPage.CornerRadius = UDim.new(0, 10)
     UICornerPage.Parent = PageContainer
 
-    local TabList = Instance.new("UIListLayout")
-    TabList.Parent = TabContainer
-    TabList.SortOrder = Enum.SortOrder.LayoutOrder
-
     local Pages = {}
 
     local Window = {}
 
-    -- Function to create a tab
+    -- Function to create a new tab
     function Window:CreateTab(name)
         local TabButton = Instance.new("TextButton")
         TabButton.Name = name .. "Tab"
         TabButton.Parent = TabContainer
-        TabButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+        TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
         TabButton.Size = UDim2.new(1, 0, 0, 40)
         TabButton.Font = Enum.Font.Gotham
         TabButton.Text = name
@@ -127,15 +128,12 @@ function DaviHubLibrary:CreateWindow(title)
         UICornerTabButton.CornerRadius = UDim.new(0, 10)
         UICornerTabButton.Parent = TabButton
 
-        local Page = Instance.new("ScrollingFrame")
+        local Page = Instance.new("Frame")
         Page.Name = name .. "Page"
         Page.Parent = PageContainer
-        Page.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+        Page.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
         Page.Size = UDim2.new(1, 0, 1, 0)
         Page.Visible = false
-        Page.ScrollBarThickness = 6
-        Page.BorderSizePixel = 0
-        Page.CanvasSize = UDim2.new(0, 0, 0, 0)
 
         local UIList = Instance.new("UIListLayout")
         UIList.Parent = Page
@@ -158,7 +156,7 @@ function DaviHubLibrary:CreateWindow(title)
             local Button = Instance.new("TextButton")
             Button.Name = text .. "Button"
             Button.Parent = Page
-            Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             Button.Size = UDim2.new(1, -10, 0, 40)
             Button.Font = Enum.Font.Gotham
             Button.Text = text
@@ -179,7 +177,7 @@ function DaviHubLibrary:CreateWindow(title)
             local ToggleFrame = Instance.new("Frame")
             ToggleFrame.Name = text .. "Toggle"
             ToggleFrame.Parent = Page
-            ToggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             ToggleFrame.Size = UDim2.new(1, -10, 0, 40)
 
             local UICornerToggle = Instance.new("UICorner")
@@ -224,71 +222,6 @@ function DaviHubLibrary:CreateWindow(title)
                     ToggleButton.Text = "OFF"
                 end
                 callback(toggled)
-            end)
-        end
-
-        -- Function to create a slider
-        function Tab:CreateSlider(text, min, max, default, callback)
-            local SliderFrame = Instance.new("Frame")
-            SliderFrame.Name = text .. "Slider"
-            SliderFrame.Parent = Page
-            SliderFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            SliderFrame.Size = UDim2.new(1, -10, 0, 60)
-
-            local UICornerSlider = Instance.new("UICorner")
-            UICornerSlider.CornerRadius = UDim.new(0, 10)
-            UICornerSlider.Parent = SliderFrame
-
-            local SliderText = Instance.new("TextLabel")
-            SliderText.Name = "SliderText"
-            SliderText.Parent = SliderFrame
-            SliderText.BackgroundTransparency = 1
-            SliderText.Size = UDim2.new(1, -20, 0, 20)
-            SliderText.Position = UDim2.new(0, 10, 0, 10)
-            SliderText.Font = Enum.Font.Gotham
-            SliderText.Text = text .. ": " .. default
-            SliderText.TextColor3 = Color3.fromRGB(255, 255, 255)
-            SliderText.TextSize = 14
-            SliderText.TextXAlignment = Enum.TextXAlignment.Left
-
-            local SliderBar = Instance.new("Frame")
-            SliderBar.Name = "SliderBar"
-            SliderBar.Parent = SliderFrame
-            SliderBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-            SliderBar.Size = UDim2.new(0.9, 0, 0, 10)
-            SliderBar.Position = UDim2.new(0.05, 0, 0, 40)
-            SliderBar.BorderSizePixel = 0
-
-            local SliderFill = Instance.new("Frame")
-            SliderFill.Name = "SliderFill"
-            SliderFill.Parent = SliderBar
-            SliderFill.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-            SliderFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
-
-            local UserInput = Instance.new("TextButton")
-            UserInput.Parent = SliderBar
-            UserInput.Size = UDim2.new(1, 0, 1, 0)
-            UserInput.BackgroundTransparency = 1
-            UserInput.Text = ""
-
-            UserInput.MouseButton1Down:Connect(function()
-                local connection
-                connection = UserInputService.InputChanged:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseMovement then
-                        local mousePos = UserInputService:GetMouseLocation().X
-                        local barPos = SliderBar.AbsolutePosition.X
-                        local barSize = SliderBar.AbsoluteSize.X
-                        local percentage = math.clamp((mousePos - barPos) / barSize, 0, 1)
-                        SliderFill.Size = UDim2.new(percentage, 0, 1, 0)
-                        local value = math.floor(min + (max - min) * percentage)
-                        SliderText.Text = text .. ": " .. value
-                        callback(value)
-                    end
-                end)
-
-                UserInput.MouseButton1Up:Connect(function()
-                    connection:Disconnect()
-                end)
             end)
         end
 
